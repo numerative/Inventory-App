@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Inventory App</string>
+    <string name="empty_text_string">No items found. Click option to add new items.</string>
+    <string name="label_item_name_string">Item Name</string>
+    <string name="label_price_string">Price</string>
+    <string name="label_quantity_string">Qty</string>
+    <string name="sale">SALE</string>
+    <string name="edit_text_hint_supplier_name">Supplier Name</string>
+    <string name="edit_text_hint_supplier_phone">Supplier Phone</string>
+    <string name="button_call">CALL</string>
 </resources>
