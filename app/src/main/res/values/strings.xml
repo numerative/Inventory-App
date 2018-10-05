@@ -8,4 +8,8 @@
     <string name="edit_text_hint_supplier_name">Supplier Name</string>
     <string name="edit_text_hint_supplier_phone">Supplier Phone</string>
     <string name="button_call">CALL</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="add_item">Add Item</string>
+    <string name="delete_all">Delete All</string>
 </resources>
