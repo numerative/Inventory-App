@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.michaelhat.inventoryapp.InventoryContract.StockEntry;
+import com.michaelhat.inventoryapp.InventoryContract.ProductEntry;
 
 public class InventoryDbHelper extends SQLiteOpenHelper {
     //If you change the database schema, you must implement the database version
@@ -15,14 +15,14 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ", ";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " +
-                    StockEntry.TABLE_NAME + " (" +
-                    StockEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
-                    StockEntry.COLUMN_PRODUCT_NAME + TEXT_TYPE + COMMA_SEP +
-                    StockEntry.COLUMN_PRODUCT_PRICE + INTEGER_TYPE + COMMA_SEP +
-                    StockEntry.COLUMN_PRODUCT_QUANTITY + INTEGER_TYPE + COMMA_SEP +
-                    StockEntry.COLUMN_SUPPLIER_NAME + TEXT_TYPE + COMMA_SEP +
-                    StockEntry.COLUMN_SUPPLIER_PHONE + TEXT_TYPE + " );";
-    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS" + StockEntry.TABLE_NAME;
+                    ProductEntry.TABLE_NAME + " (" +
+                    ProductEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
+                    ProductEntry.COLUMN_PRODUCT_NAME + TEXT_TYPE + COMMA_SEP +
+                    ProductEntry.COLUMN_PRODUCT_PRICE + INTEGER_TYPE + COMMA_SEP +
+                    ProductEntry.COLUMN_PRODUCT_QUANTITY + INTEGER_TYPE + COMMA_SEP +
+                    ProductEntry.COLUMN_SUPPLIER_NAME + TEXT_TYPE + COMMA_SEP +
+                    ProductEntry.COLUMN_SUPPLIER_PHONE + TEXT_TYPE + " );";
+    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS" + ProductEntry.TABLE_NAME;
 
     public InventoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

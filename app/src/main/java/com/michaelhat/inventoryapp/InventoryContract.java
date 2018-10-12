@@ -9,7 +9,7 @@ public final class InventoryContract {
     public static final String PATH_PRODUCTS = "products";
 
     /*Inner class that defines the table contents of the inventory table */
-    public static final class StockEntry implements BaseColumns {
+    public static final class ProductEntry implements BaseColumns {
         //Table name
         public static final String TABLE_NAME = "products";
 
