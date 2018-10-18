@@ -20,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
             ProductEntry.COLUMN_PRODUCT_NAME,
             ProductEntry.COLUMN_PRODUCT_PRICE,
             ProductEntry.COLUMN_PRODUCT_QUANTITY,
-            ProductEntry.COLUMN_SUPPLIER_NAME,
-            ProductEntry.COLUMN_SUPPLIER_PHONE
     };
 
     InventoryDbHelper dbHelper;
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void readProduct() {
         String sortOrder =
-                ProductEntry._ID + " DESC";
+                ProductEntry._ID + " ASC";
 
         Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, projection, null,
                 null, sortOrder);
