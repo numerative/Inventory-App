@@ -1,11 +1,13 @@
 package com.michaelhat.inventoryapp;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.michaelhat.inventoryapp.InventoryContract.ProductEntry;
 
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     InventoryDbHelper dbHelper;
+    ProductCursorApdapter productCursorApdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         readProduct();
+        ListView listView = findViewById(R.id.list_view);
+        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, projection, null,
+                null, null);
+        productCursorApdapter = new ProductCursorApdapter(this, cursor);
+        listView.setAdapter(productCursorApdapter);
     }
 
     private void readProduct() {
@@ -59,6 +67,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case (R.id.add_item):
+                Intent openDetailScreenIntent = new Intent(MainActivity.this, DetailScreenActivity.class);
+                startActivity(openDetailScreenIntent);
+                break;
+            default:
+        }
 
         return true;
     }
