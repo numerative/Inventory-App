@@ -171,14 +171,14 @@ public class InventoryProvider extends ContentProvider {
             case PRODUCT_ID:
                 selection = ProductEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return updateParty(uri, contentValues, selection, selectionArgs);
+                return updateProduct(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Editing is not supported for " + uri);
         }
     }
 
-    private int updateParty(Uri uri, ContentValues contentValues, String selection,
-                            String[] selectionArgs) {
+    private int updateProduct(Uri uri, ContentValues contentValues, String selection,
+                              String[] selectionArgs) {
         //If there are no values to update, then don't try to update the database
         if (contentValues.size() == 0) {
             return 0;
@@ -193,7 +193,7 @@ public class InventoryProvider extends ContentProvider {
         //Get writeable database
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
-        int rowsUpdated = database.update(ProductEntry.COLUMN_PRODUCT_NAME, contentValues,
+        int rowsUpdated = database.update(ProductEntry.TABLE_NAME, contentValues,
                 selection, selectionArgs);
 
         if (rowsUpdated != 0) {

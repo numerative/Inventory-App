@@ -12,9 +12,14 @@ import android.widget.ListView;
 import com.michaelhat.inventoryapp.InventoryContract.ProductEntry;
 
 import androidx.appcompat.app.AppCompatActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.list_view)
+    ListView listView;
 
     //Columns to fetch
     String[] projection = {
@@ -23,17 +28,15 @@ public class MainActivity extends AppCompatActivity {
             ProductEntry.COLUMN_PRODUCT_PRICE,
             ProductEntry.COLUMN_PRODUCT_QUANTITY,
     };
-
-    InventoryDbHelper dbHelper;
     ProductCursorApdapter productCursorApdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         readProduct();
-        ListView listView = findViewById(R.id.list_view);
         Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, projection, null,
                 null, null);
         productCursorApdapter = new ProductCursorApdapter(this, cursor);
