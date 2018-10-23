@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:focusable="false"
         android:text="@string/sale"
         app:layout_constraintBaseline_toBaselineOf="@+id/list_item_quantity"
         app:layout_constraintEnd_toEndOf="parent" />
