@@ -15,4 +15,6 @@
     <string name="title_edit_product">Edit Product</string>
     <string name="title_add_product">Add a Product</string>
     <string name="action_save">Save</string>
+    <string name="toast_edit_error">Error. Couldn\'t edit product.</string>
+    <string name="toast_edit_saved">Success. Product edited</string>
 </resources>
