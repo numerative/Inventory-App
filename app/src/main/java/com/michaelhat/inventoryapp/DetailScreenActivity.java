@@ -31,6 +31,8 @@ public class DetailScreenActivity extends AppCompatActivity {
             ProductEntry.COLUMN_SUPPLIER_NAME,
             ProductEntry.COLUMN_SUPPLIER_PHONE
     };
+    //Current Product Name
+    String productName;
 
     //Current Pet URI
     Uri currentUri;
@@ -70,7 +72,7 @@ public class DetailScreenActivity extends AppCompatActivity {
         assert cursor != null;
         cursor.moveToNext();
         //Storing all values to variables
-        String productName = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_NAME));
+        productName = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_NAME));
         String productPrice = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_PRICE));
         String productQuantity = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_QUANTITY));
         String supplierName = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_SUPPLIER_NAME));
@@ -130,7 +132,7 @@ public class DetailScreenActivity extends AppCompatActivity {
 
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.delete_product_alertdialog_message));
+        builder.setMessage(getString(R.string.delete_product_alertdialog_message, productName));
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

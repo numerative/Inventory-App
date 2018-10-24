@@ -21,6 +21,9 @@
     <string name="toast_save_failure">Error saving product</string>
     <string name="delete_success">Product Deleted</string>
     <string name="delete_error">Error deleting product</string>
-    <string name="delete_product_alertdialog_message">Delete this product?</string>
+    <string name="delete_product_alertdialog_message">Delete %s?</string>
     <string name="cancel">Cancel</string>
+    <string name="all_products">all products</string>
+    <string name="toast_delete_all_fail">Error deleting products</string>
+    <string name="toast_delete_all_success">All products deleted</string>
 </resources>

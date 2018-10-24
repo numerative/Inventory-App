@@ -1,6 +1,7 @@
 package com.michaelhat.inventoryapp;
 
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,9 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.michaelhat.inventoryapp.InventoryContract.ProductEntry;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,10 +101,50 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(openDetailScreenIntent);
                 break;
             case (R.id.delete_all):
+                showDeleteConfirmationDialog();
                 break;
             default:
         }
 
         return true;
+    }
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.delete_product_alertdialog_message, getString(R.string.all_products)));
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteAllProduct();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (dialogInterface != null) {
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteAllProduct() {
+        int numberOfRowsDeleted = getContentResolver().delete(ProductEntry.CONTENT_URI, null,
+                null);
+        deleteAllToast(numberOfRowsDeleted);
+    }
+
+    private void deleteAllToast(int numberOfRowsDeleted) {
+        switch (numberOfRowsDeleted) {
+            case 0:
+                Toast.makeText(this, R.string.toast_delete_all_fail, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, R.string.toast_delete_all_success, Toast.LENGTH_SHORT).show();
+        }
     }
 }
