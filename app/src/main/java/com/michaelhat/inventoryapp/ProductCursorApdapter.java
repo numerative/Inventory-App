@@ -1,10 +1,8 @@
 package com.michaelhat.inventoryapp;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +26,7 @@ public class ProductCursorApdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, final Context context, final Cursor cursor) {
+    public void bindView(View view, Context context, Cursor cursor) {
         //Find fields to populate
         TextView productNameView = view.findViewById(R.id.list_item_item_name);
         TextView productPriceView = view.findViewById(R.id.list_item_price);
@@ -49,7 +47,7 @@ public class ProductCursorApdapter extends CursorAdapter {
         final ContentValues quantityAfterSaleForDb = new ContentValues();
         quantityAfterSaleForDb.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, afterSaleQuantity);
 
-        saleButton.setOnClickListener(new View.OnClickListener() {
+/*        saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Uri productUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, cursor.getLong(cursor.getColumnIndexOrThrow(ProductEntry._ID)));
@@ -57,7 +55,7 @@ public class ProductCursorApdapter extends CursorAdapter {
                 int rowsUpdated = context.getContentResolver().update(productUri, quantityAfterSaleForDb, null, null);
                 Log.v("Rows updated", String.valueOf(rowsUpdated));
             }
-        });
+        });*/
 
         //Set text
         productNameView.setText(productName);

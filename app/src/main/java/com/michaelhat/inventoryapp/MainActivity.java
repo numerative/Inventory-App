@@ -22,6 +22,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.list_view)
+    ListView listView;
     @BindView(R.id.empty_view)
     View emptyView;
 
@@ -39,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        ListView listView = findViewById(R.id.list_view);
         listView.setEmptyView(emptyView); //Setting Empty View
 
         readProduct();
