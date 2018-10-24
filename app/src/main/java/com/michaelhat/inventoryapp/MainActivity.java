@@ -1,12 +1,13 @@
 package com.michaelhat.inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentUris;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,13 +18,15 @@ import android.widget.Toast;
 
 import com.michaelhat.inventoryapp.InventoryContract.ProductEntry;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.list_view)
     ListView listView;
@@ -46,10 +49,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         listView.setEmptyView(emptyView); //Setting Empty View
 
-        readProduct();
-        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, projection, null,
-                null, null);
-        productCursorApdapter = new ProductCursorApdapter(this, cursor);
+        productCursorApdapter = new ProductCursorApdapter(this, null);
         listView.setAdapter(productCursorApdapter);
 
         //Setting onItemClickListener on each view
@@ -65,24 +65,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(openDetailScreenActivity);
             }
         });
-    }
 
-    private void readProduct() {
-        String sortOrder =
-                ProductEntry.COLUMN_PRODUCT_NAME + " ASC";
-
-        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, projection, null,
-                null, sortOrder);
-
-        assert cursor != null;
-        while (cursor.moveToNext()) {
-            String name = cursor.getString(
-                    cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_NAME)
-            );
-            Log.i("Retrieved product", name);
-            Log.i("Cursor Size", String.valueOf(cursor.getCount()));
-        }
-        cursor.close();
+        //Start the loader
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -146,5 +131,34 @@ public class MainActivity extends AppCompatActivity {
             default:
                 Toast.makeText(this, R.string.toast_delete_all_success, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @NonNull
+    @Override
+    public android.content.Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        return new CursorLoader(
+                MainActivity.this,
+                ProductEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor cursor) {
+        //Swap cursor till a cursor is available
+        if (cursor != null && cursor.getCount() > 0) {
+            //Updating the Cursor
+            productCursorApdapter.swapCursor(cursor);
+        } else {
+            productCursorApdapter.swapCursor(null);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(android.content.Loader<Cursor> loader) {
+        productCursorApdapter.swapCursor(null);
     }
 }
