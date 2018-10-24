@@ -19,4 +19,8 @@
     <string name="toast_edit_saved">Success. Product edited</string>
     <string name="toast_save_success">Sucess! Product saved</string>
     <string name="toast_save_failure">Error saving product</string>
+    <string name="delete_success">Product Deleted</string>
+    <string name="delete_error">Error deleting product</string>
+    <string name="delete_product_alertdialog_message">Delete this product?</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.michaelhat.inventoryapp;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.michaelhat.inventoryapp.InventoryContract.ProductEntry;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import butterknife.BindView;
@@ -111,11 +113,53 @@ public class DetailScreenActivity extends AppCompatActivity {
                 break;
             case R.id.edit_record:
                 break;
+            case R.id.action_single_delete:
+                showDeleteConfirmationDialog();
+                break;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(DetailScreenActivity.this);
                 break;
         }
         return true;
+    }
+
+    private void deleteProduct() {
+        int rowsDeleted = getContentResolver().delete(currentUri, null, null);
+        deleteProductToast(rowsDeleted);
+    }
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.delete_product_alertdialog_message));
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteProduct();
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (dialogInterface != null) {
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteProductToast(int rowsDeleted) {
+        switch (rowsDeleted) {
+            case 1:
+                Toast.makeText(this, R.string.delete_success, Toast.LENGTH_SHORT).show();
+                break;
+            case 0:
+                Toast.makeText(this, R.string.delete_error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void saveProduct() {
