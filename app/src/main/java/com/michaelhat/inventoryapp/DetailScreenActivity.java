@@ -127,11 +127,20 @@ public class DetailScreenActivity extends AppCompatActivity {
         values.put(ProductEntry.COLUMN_SUPPLIER_PHONE, supplierPhoneEditText.getText().toString().trim());
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, supplierNameEditText.getText().toString().trim());
 
-        if (currentUri != null) {
+        if (currentUri != null) { //if Product to be edited
             int rowsUpdated = getContentResolver().update(currentUri, values, null, null);
             displayEditToast(rowsUpdated);
+        } else { //else it is a new product to be saved
+            Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+            displaySaveToast(newUri);
+        }
+    }
+
+    private void displaySaveToast(Uri newUri) {
+        if (newUri != null) {
+            Toast.makeText(this, R.string.toast_save_success, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_save_failure, Toast.LENGTH_SHORT).show();
         }
     }
 

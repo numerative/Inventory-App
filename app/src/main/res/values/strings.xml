@@ -17,4 +17,6 @@
     <string name="action_save">Save</string>
     <string name="toast_edit_error">Error. Couldn\'t edit product.</string>
     <string name="toast_edit_saved">Success. Product edited</string>
+    <string name="toast_save_success">Sucess! Product saved</string>
+    <string name="toast_save_failure">Error saving product</string>
 </resources>
