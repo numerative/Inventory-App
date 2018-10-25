@@ -1,14 +1,16 @@
 package com.michaelhat.inventoryapp;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -47,6 +49,10 @@ public class DetailScreenActivity extends AppCompatActivity {
     TextInputEditText supplierNameEditText;
     @BindView(R.id.supplier_phone_edit_text)
     TextInputEditText supplierPhoneEditText;
+    @BindView(R.id.button_decrease_qty)
+    Button minusButton;
+    @BindView(R.id.button_increase_qty)
+    Button plusButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +66,18 @@ public class DetailScreenActivity extends AppCompatActivity {
             setTitle(R.string.title_edit_product);
             //Use content provider to populate fields
             getProductDetails();
+            minusButton.setOnClickListener(new plusMinusButtonClickListener());
+            plusButton.setOnClickListener(new plusMinusButtonClickListener());
         } else {
             setTitle(R.string.title_add_product);
+            disableQuantityButtons();
             invalidateOptionsMenu(); //To prevent delete option on a new entry.
         }
+    }
+
+    private void disableQuantityButtons() {
+        minusButton.setEnabled(false);
+        plusButton.setEnabled(false);
     }
 
     private void getProductDetails() {
@@ -83,8 +97,6 @@ public class DetailScreenActivity extends AppCompatActivity {
         quantityEditText.setText(productQuantity);
         supplierNameEditText.setText(supplierName);
         supplierPhoneEditText.setText(supplierPhone);
-
-        Log.v("Product Name", cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_NAME)));
         cursor.close();
     }
 
@@ -197,6 +209,42 @@ public class DetailScreenActivity extends AppCompatActivity {
                 break;
             case 1:
                 Toast.makeText(this, R.string.toast_edit_saved, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //Custom OnClickListener
+    public class plusMinusButtonClickListener implements View.OnClickListener {
+
+        plusMinusButtonClickListener() {
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            String[] quantityProjection = {
+                    ProductEntry.COLUMN_PRODUCT_QUANTITY
+            };
+            Cursor cursor = getContentResolver().query(currentUri, quantityProjection, null,
+                    null, null);
+            assert cursor != null;
+            cursor.moveToNext();
+            int productQuantity = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_QUANTITY));
+            int afterSaleQuantity;
+
+            if (view.getId() == R.id.button_decrease_qty) {
+                afterSaleQuantity = productQuantity - 1;
+            } else {
+                afterSaleQuantity = productQuantity + 1;
+            }
+
+            ContentValues quantityAfterSaleForDb = new ContentValues();
+            quantityAfterSaleForDb.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, afterSaleQuantity);
+            Uri productUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, ContentUris.parseId(currentUri));
+            int rowsUpdated = getContentResolver().update(productUri, quantityAfterSaleForDb, null, null);
+            if (rowsUpdated == 1) {
+                quantityEditText.setText(String.valueOf(afterSaleQuantity));
+            }
+            cursor.close();
         }
     }
 }
