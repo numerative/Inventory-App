@@ -53,6 +53,8 @@ public class DetailScreenActivity extends AppCompatActivity {
     Button minusButton;
     @BindView(R.id.button_increase_qty)
     Button plusButton;
+    @BindView(R.id.call_button)
+    Button callButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,15 @@ public class DetailScreenActivity extends AppCompatActivity {
             disableQuantityButtons();
             invalidateOptionsMenu(); //To prevent delete option on a new entry.
         }
+
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                dialIntent.setData(Uri.parse("tel:" + supplierPhoneEditText.getText().toString()));
+                startActivity(dialIntent);
+            }
+        });
     }
 
     private void disableQuantityButtons() {
