@@ -1,5 +1,6 @@
 package com.michaelhat.inventoryapp;
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +17,8 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.michaelhat.inventoryapp.InventoryContract.ProductEntry;
+
+import java.util.Objects;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +39,10 @@ public class DetailScreenActivity extends AppCompatActivity {
     };
     //Current Product Name
     String productName;
+    String productPrice;
+    String productQuantity;
+    String supplierName;
+    String supplierPhone;
 
     //Current Pet URI
     Uri currentUri;
@@ -81,10 +89,11 @@ public class DetailScreenActivity extends AppCompatActivity {
         }
 
         callButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NewApi")
             @Override
             public void onClick(View view) {
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL);
-                dialIntent.setData(Uri.parse("tel:" + supplierPhoneEditText.getText().toString()));
+                dialIntent.setData(Uri.parse("tel:" + Objects.requireNonNull(supplierPhoneEditText.getText()).toString()));
                 startActivity(dialIntent);
             }
         });
@@ -102,10 +111,10 @@ public class DetailScreenActivity extends AppCompatActivity {
         cursor.moveToNext();
         //Storing all values to variables
         productName = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_NAME));
-        String productPrice = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_PRICE));
-        String productQuantity = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_QUANTITY));
-        String supplierName = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_SUPPLIER_NAME));
-        String supplierPhone = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_SUPPLIER_PHONE));
+        productPrice = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_PRICE));
+        productQuantity = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_QUANTITY));
+        supplierName = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_SUPPLIER_NAME));
+        supplierPhone = cursor.getString(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_SUPPLIER_PHONE));
         //Set Text
         productNameEditText.setText(productName);
         priceEditText.setText(productPrice);
@@ -137,8 +146,20 @@ public class DetailScreenActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                saveProduct();
-                finish();
+                //emptyFieldCheck();
+                extractStringsFromEditText();
+                Boolean fieldsAreEmpty = validateFieldsForEmpty();
+                Boolean fieldsAreNegative = false;
+                if (!fieldsAreEmpty) {
+                    fieldsAreNegative = validateFieldsForNegative();
+                }
+                if (fieldsAreEmpty || fieldsAreNegative) {
+                    Toast.makeText(this, R.string.toast_errors_on_form, Toast.LENGTH_SHORT).show();
+                    break;
+                } else {
+                    saveProduct();
+                    finish();
+                }
                 break;
             case R.id.edit_record:
                 productNameEditText.setEnabled(true);
@@ -154,6 +175,48 @@ public class DetailScreenActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    private Boolean validateFieldsForNegative() {
+        if (Integer.valueOf(productPrice) < 0) {
+            priceEditText.setError(getString(R.string.positive_only));
+            return true;
+        } else if (Integer.valueOf(productQuantity) < 0) {
+            quantityEditText.setError(getString(R.string.positive_only));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private Boolean validateFieldsForEmpty() {
+        if (TextUtils.isEmpty(productName)) {
+            productNameEditText.setError(getString(R.string.required));
+            return true;
+        } else if (TextUtils.isEmpty(productPrice)) {
+            priceEditText.setError(getString(R.string.required));
+            return true;
+        } else if (TextUtils.isEmpty(productQuantity)) {
+            quantityEditText.setError(getString(R.string.required));
+            return true;
+        } else if (TextUtils.isEmpty(supplierName)) {
+            supplierNameEditText.setError(getString(R.string.required));
+            return true;
+        } else if (TextUtils.isEmpty(supplierPhone)) {
+            supplierPhoneEditText.setError(getString(R.string.required));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private void extractStringsFromEditText() {
+        productName = Objects.requireNonNull(productNameEditText.getText()).toString().trim();
+        productPrice = Objects.requireNonNull(priceEditText.getText()).toString().trim();
+        productQuantity = Objects.requireNonNull(quantityEditText.getText()).toString().trim();
+        supplierName = Objects.requireNonNull(supplierNameEditText.getText()).toString().trim();
+        supplierPhone = Objects.requireNonNull(supplierPhoneEditText.getText()).toString().trim();
     }
 
     private void deleteProduct() {
@@ -195,14 +258,15 @@ public class DetailScreenActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("NewApi")
     private void saveProduct() {
         //Prepare the contentValues
         ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME, productNameEditText.getText().toString().trim());
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceEditText.getText().toString().trim());
-        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityEditText.getText().toString().trim());
-        values.put(ProductEntry.COLUMN_SUPPLIER_PHONE, supplierPhoneEditText.getText().toString().trim());
-        values.put(ProductEntry.COLUMN_SUPPLIER_NAME, supplierNameEditText.getText().toString().trim());
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME, Objects.requireNonNull(productNameEditText.getText()).toString().trim());
+        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, Objects.requireNonNull(priceEditText.getText()).toString().trim());
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, Objects.requireNonNull(quantityEditText.getText()).toString().trim());
+        values.put(ProductEntry.COLUMN_SUPPLIER_PHONE, Objects.requireNonNull(supplierPhoneEditText.getText()).toString().trim());
+        values.put(ProductEntry.COLUMN_SUPPLIER_NAME, Objects.requireNonNull(supplierNameEditText.getText()).toString().trim());
 
         if (currentUri != null) { //if Product to be edited
             int rowsUpdated = getContentResolver().update(currentUri, values, null, null);
@@ -235,7 +299,7 @@ public class DetailScreenActivity extends AppCompatActivity {
     public class plusMinusButtonClickListener implements View.OnClickListener {
 
         plusMinusButtonClickListener() {
-
+            //Empty Constructor
         }
 
         @Override
@@ -256,12 +320,16 @@ public class DetailScreenActivity extends AppCompatActivity {
                 afterSaleQuantity = productQuantity + 1;
             }
 
-            ContentValues quantityAfterSaleForDb = new ContentValues();
-            quantityAfterSaleForDb.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, afterSaleQuantity);
-            Uri productUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, ContentUris.parseId(currentUri));
-            int rowsUpdated = getContentResolver().update(productUri, quantityAfterSaleForDb, null, null);
-            if (rowsUpdated == 1) {
-                quantityEditText.setText(String.valueOf(afterSaleQuantity));
+            if (afterSaleQuantity >= 0) {
+                ContentValues quantityAfterSaleForDb = new ContentValues();
+                quantityAfterSaleForDb.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, afterSaleQuantity);
+                Uri productUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, ContentUris.parseId(currentUri));
+                int rowsUpdated = getContentResolver().update(productUri, quantityAfterSaleForDb, null, null);
+                if (rowsUpdated == 1) {
+                    quantityEditText.setText(String.valueOf(afterSaleQuantity));
+                }
+            } else {
+                Toast.makeText(DetailScreenActivity.this, R.string.stock_zero, Toast.LENGTH_SHORT).show();
             }
             cursor.close();
         }

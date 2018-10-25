@@ -48,7 +48,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/product_name_edit_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@drawable/disabled_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -69,8 +70,8 @@
                 android:id="@+id/price_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:inputType="number" />
+                android:inputType="number"
+                android:textColor="@drawable/disabled_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -88,7 +89,8 @@
                 android:id="@+id/quantity_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textColor="@drawable/disabled_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -108,7 +110,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/supplier_name_edit_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@drawable/disabled_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -126,8 +129,8 @@
                 android:id="@+id/supplier_phone_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:textColor="@drawable/disabled_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

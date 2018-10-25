@@ -28,4 +28,10 @@
     <string name="toast_delete_all_success">All products deleted</string>
     <string name="minus">-</string>
     <string name="plus">+</string>
+    <string name="stock_zero">Stock not available</string>
+    <string name="toast_all_fields_compulsory">All fields compulsory</string>
+    <string name="toast_no_negative">Values must be non-negative</string>
+    <string name="required">Required</string>
+    <string name="positive_only">Positive value only</string>
+    <string name="toast_errors_on_form">Error(s) on the form!</string>
 </resources>
