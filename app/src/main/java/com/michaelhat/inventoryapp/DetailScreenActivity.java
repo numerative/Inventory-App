@@ -57,7 +57,7 @@ public class DetailScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.detail_screen);
+        setContentView(R.layout.activity_detail_screen);
         ButterKnife.bind(this); //Butterknife binding views
         Intent intent = getIntent();
         currentUri = intent.getData();
@@ -126,6 +126,10 @@ public class DetailScreenActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.edit_record:
+                productNameEditText.setEnabled(true);
+                priceEditText.setEnabled(true);
+                supplierNameEditText.setEnabled(true);
+                supplierPhoneEditText.setEnabled(true);
                 break;
             case R.id.action_single_delete:
                 showDeleteConfirmationDialog();
