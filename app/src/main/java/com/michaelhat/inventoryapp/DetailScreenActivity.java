@@ -70,6 +70,10 @@ public class DetailScreenActivity extends AppCompatActivity {
             getProductDetails();
             minusButton.setOnClickListener(new plusMinusButtonClickListener());
             plusButton.setOnClickListener(new plusMinusButtonClickListener());
+            productNameEditText.setEnabled(false);
+            priceEditText.setEnabled(false);
+            supplierNameEditText.setEnabled(false);
+            supplierPhoneEditText.setEnabled(false);
         } else {
             setTitle(R.string.title_add_product);
             disableQuantityButtons();

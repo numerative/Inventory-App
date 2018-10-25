@@ -26,4 +26,6 @@
     <string name="all_products">all products</string>
     <string name="toast_delete_all_fail">Error deleting products</string>
     <string name="toast_delete_all_success">All products deleted</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
 </resources>
